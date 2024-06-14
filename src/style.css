@@ -38,6 +38,39 @@ body {
   align-self: stretch; padding: 10px; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex
 }
 
+.selectionBar {
+  flex-direction: column;
+  position: absolute;
+  top: 22px;
+  right: 100px;
+  background: #E9ECEE;
+  align-self: stretch;
+  padding: 10px 15px;
+  border-radius: 15px;
+  border: 2px solid #00B2FF;
+  justify-content: space-between;
+  align-items: center;
+  display: inline-flex;
+}
+
+.variantText, .selectedVariantText {
+  width: 302.29px;
+  color: black;
+  font-size: 24px;
+  font-family: Montserrat;
+  font-weight: 600;
+  word-wrap: break-word;
+  height: 30px;
+}
+
+.variantText {
+  border-top: 1px solid #00B2FF; padding: 10px 15px;
+}
+
+.selectedVariantText {
+  padding-left: 15px;
+}
+
 .addQuestion {
   cursor: pointer;
   width: 100%; display: inline-flex; align-items: center; justify-content: center; align-self: stretch;
@@ -95,6 +128,58 @@ body {
   align-self: stretch; padding-left: 81px; padding-right: 81px; justify-content: center; align-items: center; gap: 10px; display: inline-flex
 }
 
-.weekDays {
-  align-self: stretch; padding-left: 81px; padding-right: 81px; justify-content: center; align-items: center; gap: 10px; display: inline-flex
+.week {
+  align-self: stretch; justify-content: space-between; align-items: center; display: inline-flex
 }
+
+.weekDay {
+  width: 45px; padding-top: 5px; padding-bottom: 5px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex
+}
+
+.weekDayName {
+  text-align: center; color: #B3B3B3; font-size: 22px; font-family: Montserrat; font-weight: 400; word-wrap: break-word
+}
+
+.weekNum, .dayNum {
+  width: 45px; padding-top: 5px; padding-bottom: 5px; border-radius: 4px; justify-content: center; align-items: center; display: inline-flex
+}
+
+.weekNum {
+  background: #616161;
+}
+
+.weekNumText, .dayNumText, .weekEndNumText {
+  text-align: center; font-size: 22px; font-family: Montserrat; font-weight: 400; word-wrap: break-word
+}
+
+.weekNumText {
+  color: #B3B3B3;
+}
+
+.weekEndNumText {
+  color: #00B2FF;
+}
+
+input[type="checkbox"] {
+  /* border: 1px solid #A9A9A9; Устанавливаем границу для чекбокса */
+  width: 30px; /* set the width of the checkbox */
+  height: 30px; /* set the height of the checkbox */
+  background-color: transparent; /* Делаем фон чекбокса прозрачным */
+}
+
+input[type="radio"] {
+  /* border: 1px solid #A9A9A9; Устанавливаем границу для чекбокса */
+  width: 30px; /* set the width of the checkbox */
+  height: 30px; /* set the height of the checkbox */
+  background-color: transparent; /* Делаем фон чекбокса прозрачным */
+}
+
+.scrollable {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-height: 650px; /* Задаем высоту */
+  overflow-y: auto; /* Добавляем вертикальную прокрутку */
+}
+

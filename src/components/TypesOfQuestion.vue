@@ -51,38 +51,3 @@ onBeforeUnmount(() => {
     document.removeEventListener('click', handleClickOutside);
 });
 </script>
-
-<style scoped>
-.selectionBar {
-    flex-direction: column;
-    position: absolute;
-    top: 22px;
-    right: 100px;
-    background: #E9ECEE;
-    align-self: stretch;
-    padding: 10px 15px;
-    border-radius: 15px;
-    border: 2px solid #00B2FF;
-    justify-content: space-between;
-    align-items: center;
-    display: inline-flex;
-}
-
-.variantText, .selectedVariantText {
-    width: 302.29px;
-    color: black;
-    font-size: 24px;
-    font-family: Montserrat;
-    font-weight: 600;
-    word-wrap: break-word;
-    height: 30px;
-}
-
-.variantText {
-    border-top: 1px solid #00B2FF; padding: 10px 15px;
-}
-
-.selectedVariantText {
-    padding-left: 15px;
-}
-</style>
