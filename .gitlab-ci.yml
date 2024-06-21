@@ -1,0 +1,31 @@
+default:
+  image: node:20
+
+stages:
+  - install
+  - test
+  - build
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+install-job:
+  stage: install
+  script:
+    - npm ci
+
+lint-job:
+  stage: test
+  script:
+    - npm run lint
+
+build-job:
+  stage: build
+  needs: [lint-job]
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
