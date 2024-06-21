@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import Main from './components/Main.vue';
-import Creating from './components/Creating.vue';
-import Completing from './components/Completing.vue';
-import Surveys from './components/Surveys.vue';
+import MainPage from './components/MainPage.vue';
+import CreatingState from './components/CreatingState.vue';
+import CompletingState from './components/CompletingState.vue';
+import ListOfSurveys from './components/ListOfSurveys.vue';
 
 const routes: Array<RouteRecordRaw> = [
-  { path: '/', component: Main },
-  { path: '/creating', component: Creating },
-  { path: '/completing', component: Completing},
-  { path: '/surveys', component: Surveys}
+  { path: '/', component: MainPage },
+  { path: '/creating', component: CreatingState },
+  { path: '/completing', component: CompletingState},
+  { path: '/surveys', component: ListOfSurveys}
 ];
 
 const router = createRouter({

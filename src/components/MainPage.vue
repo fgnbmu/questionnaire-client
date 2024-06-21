@@ -1,0 +1,102 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+import axios from 'axios';
+
+const email = ref('');
+const password = ref('');
+
+const handleLogin = async () => {
+  try {
+    const response = await axios.post('http://localhost:3000/auth/login', {
+      email: email.value,
+      password: password.value
+    });
+    const token = response.data.access_token;
+    console.log(token);
+  } catch (error) {
+    // Обработка ошибки при выполнении запроса
+  }
+};
+</script>
+
+<template>
+  <div class="registrationPage">
+    <div class="registrationBlock">
+      <div class="data">
+        <div style="color: #0F2232; font-size: 35px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">Авторизация</div>
+        <input v-model="email" type="email" class="dataField" style="color: rgba(15, 34, 50, 0.60); font-size: 24px; font-family: Montserrat; font-weight: 400;" placeholder="employee@psu.ru">
+        <input v-model="password" type="password" class="dataField" style="color: rgba(15, 34, 50, 0.60); font-size: 24px; font-family: Montserrat; font-weight: 600;" placeholder="••••••••••••">
+      </div>
+      <div style="align-self: stretch; justify-content: flex-end; align-items: center; display: inline-flex">
+        <div @click="handleLogin" class="buttonEnter">
+          <div style="text-align: center; color: white; font-size: 24px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">Войти</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.registrationPage {
+  width: 100%; 
+  height: 100%; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+}
+
+.registrationBlock {
+  padding: 30px; 
+  background: #F4F4F4; 
+  border-radius: 15px; 
+  border: 3px #0F2232 solid; 
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: flex-start; 
+  gap: 60px; 
+  display: inline-flex;
+}
+
+.data {
+  flex-direction: column; 
+  justify-content: flex-start; 
+  align-items: flex-start; 
+  gap: 30px; 
+  display: flex;
+}
+
+.dataField {
+  width: 560px; 
+  height: 55px; 
+  padding: 13px 22px; 
+  background: rgba(233, 236, 238, 0.50); 
+  border-radius: 15px; 
+  border: 1px #00B2FF solid; 
+  display: flex; 
+  align-items:center; 
+  gap: 10px;
+}
+
+.dataField:focus,
+.dataField:active {
+  outline: none; /* Убираем внешнюю подсветку или обводку при фокусировке или активации */
+}
+
+.buttonReg, .buttonEnter {
+  width: 200px; 
+  height: 55px; 
+  padding: 13px 15px; 
+  border-radius: 15px; 
+  border: 1px #00B2FF solid; 
+  justify-content: center; 
+  align-items: center; 
+  gap: 10px; 
+  display: flex;
+  cursor: pointer;
+}
+
+.buttonEnter {
+  background: #00B2FF; 
+  color: white;
+}
+</style>
