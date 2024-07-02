@@ -12,14 +12,18 @@
    
     const data = ref<Array<{ id: number, title: string, description: string }>>([]);
 
-    const selectedSurveyCardId = ref(null);
+    const selectedSurveyCardId = ref<number | null>(null);
     const selectedOption = ref('');
 
-    const updateSelectedOption = (option) => {
+    const updateSelectedOption = (option: string) => {
         selectedOption.value = option;
-        // console.log(selectedOption.value);
-        openSurvey(selectedSurveyCardId.value);
+        if (selectedSurveyCardId.value !== null) {
+            openSurvey(selectedSurveyCardId.value);
+        } else {
+            console.error('No survey card selected!');
+        }
     };
+
 
     const getAllSurveys = async () => {
     try {
