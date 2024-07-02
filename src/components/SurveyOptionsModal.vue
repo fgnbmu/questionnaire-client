@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { defineProps } from 'vue';
+// import { defineProps } from 'vue';
 
 export default {
     props: {
