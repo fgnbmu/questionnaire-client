@@ -183,3 +183,15 @@ input[type="radio"] {
   overflow-y: auto; /* Добавляем вертикальную прокрутку */
 }
 
+.availableSurveys {
+  width: 844px; height: 100%; padding-left: 40px; padding-right: 40px; justify-content: space-between; align-items: flex-start; display: inline-flex
+}
+
+.availableSurveysList {
+  width: 844px; overflow-x: auto;
+  align-self: stretch; padding-top: 10px; padding-bottom: 10px; justify-content: flex-start; align-items: flex-start; gap: 40px; display: inline-flex
+}
+
+.surveyCard {
+  width: 200px; height: 210px; padding-top: 10px; padding-bottom: 20px; padding-left: 10px; padding-right: 10px; background: white; border-radius: 15px; border: 2px #DDDDDD solid; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 20px; display: inline-flex
+}

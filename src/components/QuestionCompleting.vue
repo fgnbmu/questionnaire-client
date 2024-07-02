@@ -1,16 +1,6 @@
 <script setup lang="ts">
-    // import TypesOfQuestionCompleting from "./TypesOfQuestionCompleting.vue"
-
     import { ref } from 'vue';
 
-    // interface ComponentProps {
-    //     status: string;
-    // }
-
-    // const props = defineProps<ComponentProps>();
-    // const props = defineProps({
-    //     status: String
-    // })
     const selectedOption = ref('Текст'); // Default selected option
     console.log(selectedOption);
 </script>

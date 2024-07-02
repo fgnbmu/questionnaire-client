@@ -1,7 +1,6 @@
 
 <script setup lang="ts">
   import Header from "./HeaderSection.vue"
-  // import Menu from "./Menu.vue"
   import SurveyCompleting from "./SurveyCompleting.vue"
   import Statistics from "./StatisticsSection.vue";
 
@@ -12,9 +11,6 @@
   const selectMenu = (menu: string) => {
       activeMenu.value = menu;
   };
-
-  // import { ref } from 'vue';
-  // const activeMenu = ref('questions');
 </script>
 
 <template>
@@ -48,7 +44,7 @@
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  max-height: 650px; /* Задаем высоту */
-  overflow-y: auto; /* Добавляем вертикальную прокрутку */
+  max-height: 650px; 
+  overflow-y: auto; 
 }
 </style>

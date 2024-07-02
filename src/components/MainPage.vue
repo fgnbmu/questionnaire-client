@@ -1,83 +1,71 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
+const router = useRouter();
+const store = useStore();
 const email = ref("");
 const password = ref("");
+const isAdmin = ref("");
 
 const handleLogin = async () => {
   try {
-    const response = await axios.post("http://localhost:3000/auth/login", {
+    const response = await axios.post(`${store.getters.getApiUrl}/auth/login`, {
       email: email.value,
       password: password.value,
     });
-    const token = response.data.access_token;
-    console.log(token);
+    store.dispatch('updateToken', response.data.access_token);
+    router.push('/surveysAdmin');
   } catch (error) {
     // Обработка ошибки при выполнении запроса
   }
 };
+
+const getProfile = async () => {
+  try {
+      const response = await axios.get(`${store.getters.getApiUrl}/auth/profile`, {
+          headers: {
+              // 'Authorization': `Bearer ${token}`
+              'Authorization': `Bearer ${store.getters.getToken}`
+          }
+      });
+      isAdmin.value = response.data.isAdmin;
+      // console.log(isAdmin.value);
+
+      if (isAdmin.value) {
+        router.push('/surveysAdmin');
+      }
+      else {
+        router.push('/surveys');
+      }
+
+  } catch (error) {
+      console.error(error);
+  }
+};
+
+const authorization = async () => {
+  await handleLogin();
+  await getProfile();
+}
+
 </script>
 
 <template>
   <div class="registrationPage">
     <div class="registrationBlock">
       <div class="data">
-        <div
-          style="
-            color: #0f2232;
-            font-size: 35px;
-            font-family: Montserrat;
-            font-weight: 600;
-            word-wrap: break-word;
-          "
-        >
+        <div style="color: #0f2232; font-size: 35px; font-family: Montserrat; font-weight: 600; word-wrap: break-word;">
           Авторизация
         </div>
-        <input
-          v-model="email"
-          type="email"
-          class="dataField"
-          style="
-            color: rgba(15, 34, 50, 0.6);
-            font-size: 24px;
-            font-family: Montserrat;
-            font-weight: 400;
-          "
-          placeholder="employee@psu.ru"
-        />
-        <input
-          v-model="password"
-          type="password"
-          class="dataField"
-          style="
-            color: rgba(15, 34, 50, 0.6);
-            font-size: 24px;
-            font-family: Montserrat;
-            font-weight: 600;
-          "
-          placeholder="••••••••••••"
-        />
+        <input v-model="email" type="email" class="dataField" style="color: rgba(15, 34, 50, 0.6); font-size: 24px; font-family: Montserrat; font-weight: 400;" placeholder="employee@psu.ru" />
+        <input v-model="password" type="password" class="dataField" style="color: rgba(15, 34, 50, 0.6); font-size: 24px; font-family: Montserrat; font-weight: 600;" placeholder="••••••••••••" />
       </div>
-      <div
-        style="
-          align-self: stretch;
-          justify-content: flex-end;
-          align-items: center;
-          display: inline-flex;
-        "
-      >
-        <div @click="handleLogin" class="buttonEnter">
-          <div
-            style="
-              text-align: center;
-              color: white;
-              font-size: 24px;
-              font-family: Montserrat;
-              font-weight: 600;
-              word-wrap: break-word;
-            "
-          >
+      <div style="align-self: stretch; justify-content: flex-end; align-items: center; display: inline-flex;">
+        <div @click="authorization" class="buttonEnter">
+          <div style="text-align: center; color: white; font-size: 24px; font-family: Montserrat; font-weight: 600; word-wrap: break-word;">
             Войти
           </div>
         </div>

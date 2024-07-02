@@ -1,20 +1,35 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
-
+    import { ref, onMounted } from 'vue';
     import QuestionCompleting from './QuestionCompleting.vue';
+    import { useStore } from 'vuex';
+    import axios from 'axios';
 
-    // const status = ref('не опубликован');
-    // const action = ref('Опубликовать');
     const questions = ref([0]); // Initialize with one Question component
+    const store = useStore();
 
-    // const addQuestion = () => {
-    //     questions.value.push(questions.value.length);
-    // };
+    const selectedSurveyId = store.state.selectedSurveyId;
 
-    // const toggleStatus = () => {
-    //     status.value = status.value === 'не опубликован' ? 'опубликован' : 'не опубликован';
-    //     action.value = action.value === 'Опубликовать' ? 'Редактировать' : 'Опубликовать';
-    // };
+    onMounted(() => {
+      console.log("Value from Vuex store:", store.state.selectedSurveyId);
+      startSurvey(selectedSurveyId);
+    }); 
+
+    const startSurvey = async (surveyId: number) => {
+    try {
+        const response = await axios.get(`${store.getters.getApiUrl}/surveys/${surveyId}/start`, {
+            headers: {
+                // 'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${store.getters.getToken}`
+            }
+        });
+        console.log('survey started');
+        console.log(response.data);
+        // data.value = response.data; // Запись полученных данных в реактивную переменную
+    } catch (error) {
+        console.error(error);
+    }
+    };
+
 </script>
 
 <template>
