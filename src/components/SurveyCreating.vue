@@ -67,7 +67,16 @@
       }
     };
 
-    const addQuestionToSurvey = async (surveyId, requestData) => {
+    const addQuestionToSurvey = async (surveyId: number, requestData: {
+          questions: {
+              title: string;
+              questionType: number;
+              description: string;
+              questionOptions: { optionCount: number; optionTitle: string; }[];
+              maxAnswerCount: number;
+              attachedImages: string[];
+          }[]
+      }) => {
       try {
         const response = await axios.post(`${store.getters.getApiUrl}/surveys/${surveyId}/question`, requestData, {
           headers: {
@@ -100,7 +109,16 @@
             };
         });
 
-        const requestData = {
+        const requestData: {
+            questions: {
+                title: string;
+                questionType: number;
+                description: string;
+                questionOptions: { optionCount: number; optionTitle: string; }[];
+                maxAnswerCount: number;
+                attachedImages: string[];
+            }[];
+        } = {
             questions: formattedQuestions
         };
 

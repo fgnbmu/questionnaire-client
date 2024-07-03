@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import Header from './HeaderSection.vue'
+    import Header from './HeaderSection.vue';
     import SurveyOptionsModal from './SurveyOptionsModal.vue';
 
     import { onMounted, ref, onUnmounted } from 'vue';

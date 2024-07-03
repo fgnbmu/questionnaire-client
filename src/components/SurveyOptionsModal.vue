@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import { defineEmits } from 'vue';
+
+const emit = defineEmits(['update:selectedOption']);
+
+const selectOption = (option: string) => {
+    emit('update:selectedOption', option);
+};
+
+</script>
+
 <template>
     <div style="width: 226px; height: 76px; background: white; border-radius: 15px; overflow: hidden; border: 2px #00B2FF solid; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
         <div @click="selectOption('Пройти опрос')" class="surveyOption" style="border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom: 1px #00B2FF solid;">
@@ -8,21 +19,6 @@
         </div>
     </div>
 </template>
-
-<script>
-// import { defineProps } from 'vue';
-
-export default {
-    props: {
-        selectedOption: String
-    },
-    methods: {
-        selectOption(option) {
-            this.$emit('update:selectedOption', option);
-        }
-    }
-}
-</script>
 
 <style scoped>
     .surveyOption {
