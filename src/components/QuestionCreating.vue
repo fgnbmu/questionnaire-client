@@ -101,10 +101,10 @@
             <div style="text-align: center; color: #A9A9A9; font-size: 22px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">Вставьте файл</div>
         </div>
         <div class="one" v-if="selectedOption === 'Один из списка'">
-            <div v-for="(answer, index) in answersForOne" :key="index" class="variantInOne">
+            <div v-for="(answer,index) in answersForOne" :key="index" class="variantInOne">
                 <img src="/src/assets/circle.svg">
                 <!-- <div style="color: black; font-size: 22px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">Ответ 1</div> -->
-                <input v-model="answersForOne[index]" type="text" :placeholder="`Ответ ${index + 1}`" style="color: black; font-size: 22px; font-family: Montserrat; font-weight: 600; word-wrap: break-word; border: none; outline: none; background-color: #E9ECEE; width: 100%;"/>
+                <input v-model="answersForOne[index]" type="text" :placeholder="`Ответ ${index + 1}${answer}`" style="color: black; font-size: 22px; font-family: Montserrat; font-weight: 600; word-wrap: break-word; border: none; outline: none; background-color: #E9ECEE; width: 100%;"/>
             </div>
             <div @click="addNewAnswerToOne" class="variantInOne">
                 <img src="/src/assets/circle.svg">
@@ -112,9 +112,9 @@
             </div>
         </div>
         <div class="multiply" v-if="selectedOption === 'Несколько из списка'">
-            <div v-for="(answer, index) in answersForMultiply" :key="index" class="variantInMultiply">
+            <div v-for="(answer,index) in answersForMultiply" :key="index" class="variantInMultiply">
                 <img src="/src/assets/rectangle.svg">
-                <input v-model="answersForMultiply[index]" type="text" :placeholder="`Ответ ${index + 1}`" style="color: black; font-size: 22px; font-family: Montserrat; font-weight: 600; word-wrap: break-word; border: none; outline: none; background-color: #E9ECEE; width: 100%;"/>
+                <input v-model="answersForMultiply[index]" type="text" :placeholder="`Ответ ${index + 1}${answer}`" style="color: black; font-size: 22px; font-family: Montserrat; font-weight: 600; word-wrap: break-word; border: none; outline: none; background-color: #E9ECEE; width: 100%;"/>
             </div>
             <div @click="addNewAnswerToMultiply" class="variantInMultiply">
                 <img src="/src/assets/rectangle.svg">
