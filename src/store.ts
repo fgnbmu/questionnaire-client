@@ -5,13 +5,19 @@ interface State {
   selectedSurveyId: number | null;
   token: string | null;
   apiUrl: string; 
+  startDate: string | null;
+  expirationDate: string | null;
+  status: string; // Добавляем переменную для хранения статуса опроса
 }
 
 const store = createStore<State>({
   state: {
     selectedSurveyId: null,
     token: null,
-    apiUrl: `http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}` 
+    apiUrl: `http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}`,
+    startDate: null, // Добавляем переменные для хранения даты начала и конца опроса
+    expirationDate: null,  
+    status: 'не опубликован' // Добавляем значение по умолчанию для статуса опроса
   },
   mutations: {
     updateSelectedSurveyId(state, newValue: number) {
@@ -20,6 +26,15 @@ const store = createStore<State>({
     updateToken(state, newToken: string) {
       state.token = newToken;
     },
+    updateStartDate(state, newDate: string) {
+      state.startDate = newDate;
+    },
+    updateExpirationDate(state, newDate: string) {
+      state.expirationDate = newDate;
+    },
+    updateStatus(state, newStatus: string) {
+      state.status = newStatus;
+    }
   },
   actions: {
     updateSelectedSurveyId({ commit }, newValue: number) {
@@ -27,6 +42,15 @@ const store = createStore<State>({
     },
     updateToken({ commit }, newToken: string) {
       commit('updateToken', newToken);
+    },
+    updateStartDate({ commit }, newStartDate: string) {
+      commit('updateStartDate', newStartDate);
+    },
+    updateExpirationDate({ commit }, newExpirationDate: string) {
+      commit('updateExpirationDate', newExpirationDate);
+    },
+    updateStatus({ commit }, newStatus: string) {
+      commit('updateStatus', newStatus);
     }
   },
   getters: {
@@ -38,6 +62,15 @@ const store = createStore<State>({
     },
     getApiUrl: (state) => {
       return state.apiUrl;
+    },
+    getStartDate: (state) => {
+      return state.startDate;
+    },
+    getExpirationDate: (state) => {
+      return state.expirationDate;
+    },
+    getStatus: (state) => {
+      return state.status;
     }
   },
   plugins: [createPersistedState()]

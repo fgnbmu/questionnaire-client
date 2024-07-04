@@ -1,16 +1,67 @@
 <script setup lang="ts">
-    import { ref,Ref } from 'vue';
+    import { ref,Ref, onMounted, onBeforeUnmount, watch } from 'vue';
     import QuestionCreating from './QuestionCreating.vue';
     import axios from 'axios';
     import { useStore } from 'vuex';
+    import { useRouter } from 'vue-router';
 
+    const router = useRouter();
     const store = useStore();
     const status = ref('не опубликован');
     const action = ref('Опубликовать');
-    const questions: Ref<Question[]> = ref([]);
 
-    const surveyName = ref('');
-    const surveyDescription = ref('');
+    const questionsFromLocalStorage = localStorage.getItem('surveyQuestions');
+    const defaultQuestions: Question[] = [];  // Set default value if nothing is found in local storage
+
+    const questions: Ref<Question[]> = ref(questionsFromLocalStorage
+      ? JSON.parse(questionsFromLocalStorage)
+      : defaultQuestions
+    );
+
+    // const surveyName = ref('');
+    // const surveyDescription = ref('');
+
+    const surveyName = ref(localStorage.getItem('surveyName') || '');
+    const surveyDescription = ref(localStorage.getItem('surveyDescription') || '');
+
+// Save the surveyName in local storage whenever it changes
+    const saveSurveyNameToLocalStorage = () => {
+      localStorage.setItem('surveyName', surveyName.value);
+    };
+
+    const saveSurveyDescriptionToLocalStorage = () => {
+      localStorage.setItem('surveyDescription', surveyDescription.value);
+    };
+
+    // Watch for changes to the surveyName and save it in local storage
+    onMounted(() => {
+      watch(surveyName, () => {
+        saveSurveyNameToLocalStorage();
+      });
+      watch(surveyDescription, () => {
+        saveSurveyDescriptionToLocalStorage();
+      });
+      watch(questions, () => {
+        localStorage.setItem('surveyQuestions', JSON.stringify(questions.value));
+      });
+    });
+
+    // Clean up: remove the watcher when the component is unmounted
+    onBeforeUnmount(() => {
+      saveSurveyNameToLocalStorage();
+      saveSurveyDescriptionToLocalStorage();
+      localStorage.setItem('surveyQuestions', JSON.stringify(questions.value));
+    });
+
+    const resetValues = () => {
+      localStorage.removeItem('surveyName');
+      localStorage.removeItem('surveyDescription');
+      localStorage.removeItem('surveyQuestions');
+      surveyName.value = '';
+      surveyDescription.value = '';
+      questions.value = [];
+    };
+
 
     interface Question {
       title: string;
@@ -45,8 +96,8 @@
         const surveyData = {
           title: surveyName.value,
           description: surveyDescription.value,
-          startDate: new Date().toISOString(),
-          expirationDate: new Date().toISOString(),
+          startDate: store.getters.getStartDate,
+          expirationDate: store.getters.getExpirationDate,
           // userAccess: 1,
           // facultyAccess: 1,
           // createdAt: new Date().toISOString(),
@@ -127,9 +178,11 @@
             if (surveyId) {
               await addQuestionToSurvey(surveyId, requestData);
             }
+            router.push('/surveysAdmin');
         }
 
         toggleStatus();
+        resetValues();
 
         console.log(requestData);
     };

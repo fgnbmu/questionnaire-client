@@ -62,7 +62,7 @@
             router.push('/completing');
         }
         else {
-            router.push('/creating');
+            router.push('/editing');
         }
     }
 </script>

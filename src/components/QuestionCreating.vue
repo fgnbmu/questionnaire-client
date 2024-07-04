@@ -45,25 +45,6 @@
 
     const questionText = ref(''); // Реактивная переменная для хранения текста вопроса
 
-    // watch([questionText], ([question]) => {
-    //     // console.log('Изменился вопрос:', question);
-    //     editQuestion(question, 1, [{ newOptionCount: 1, newOptionTitle: '' }], 1);
-    // }, { deep: true });
-
-    // watch([answersForOne], ([answers]) => {
-    //     const updatedAnswerOptions = answers.map((answer, index) => {
-    //         return { newOptionCount: index + 1, newOptionTitle: answer };
-    //     });
-    //     editQuestion(questionText.value, 2, updatedAnswerOptions, answers.length);
-    // }, { deep: true });
-
-    // watch([answersForMultiply], ([answers]) => {
-    //     const updatedAnswerOptions = answers.map((answer, index) => {
-    //         return { newOptionCount: index + 1, newOptionTitle: answer };
-    //     });
-    //     editQuestion(questionText.value, 3, updatedAnswerOptions, answers.length);
-    // }, { deep: true });
-
     watch([questionText, answersForOne, answersForMultiply], ([question, answersOne, answersMultiply]) => {
         if (selectedOption.value === 'Один из списка') {
             const updatedAnswerOptions = answersOne.map((answer, index) => {
@@ -79,6 +60,7 @@
             editQuestion(question, 1, [{ optionCount: 1, optionTitle: '' }], 1);
         }
     }, { deep: true });
+
 
 </script>
 

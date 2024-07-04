@@ -4,10 +4,33 @@
     import { useStore } from 'vuex';
     import axios from 'axios';
 
-    const questions = ref([0]); // Initialize with one Question component
     const store = useStore();
 
-    const selectedSurveyId = store.state.selectedSurveyId;
+    const selectedSurveyId = store.state.selectedSurveyId; 
+
+    interface SurveyData {
+      survey: {
+          id: number;
+          title: string;
+          description: string;
+          startDate: string;
+          expirationDate: string;
+      };
+      questions: Array<{
+          id: number;
+          title: string;
+          description: string;
+          questionType: number;
+          questionOptions: Array<{
+              optionCount: number;
+              optionTitle: string;
+          }>;
+          maxAnswerCount: number;
+          attachedImages: string[];
+      }>;
+    }
+
+    const data = ref<SurveyData | null>(null);
 
     onMounted(() => {
       console.log("Value from Vuex store:", store.state.selectedSurveyId);
@@ -24,7 +47,8 @@
         });
         console.log('survey started');
         console.log(response.data);
-        // data.value = response.data; // Запись полученных данных в реактивную переменную
+        data.value = response.data; // Запись полученных данных в реактивную переменную
+        console.log(data.value);
     } catch (error) {
         console.error(error);
     }
@@ -33,17 +57,17 @@
 </script>
 
 <template>
-  <div style="width: 100%; display: inline-flex; align-items: center; justify-content: center; align-self: stretch; flex-direction: column; gap: 30px;">
-    <div style="width: 924px; height: 100%; padding-top: 10px; padding-bottom: 10px; justify-content: space-between; align-items: center; display: inline-flex">
-      <div style="color: #0F2232; font-size: 32px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Опрос 1</div>
+  <div v-if="data" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; align-self: stretch; flex-direction: column; gap: 30px;">
+    <div v-if="data" style="width: 924px; height: 100%; padding-top: 10px; padding-bottom: 10px; justify-content: space-between; align-items: center; display: inline-flex">
+      <div style="color: #0F2232; font-size: 32px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">{{ data.survey.title }}</div>
     </div>
 
-    <div style="width: 924px; height: 100%; padding-top: 10px; padding-bottom: 10px; border-bottom: 2px #0F2232 solid; justify-content: space-between; align-items: center; display: inline-flex">
-      <div style="color: #A9A9A9; font-size: 24px; font-family: Montserrat; font-weight: 500; word-wrap: break-word; border: none; outline: none; width: 800px;">Описание</div>
+    <div v-if="data" style="width: 924px; height: 100%; padding-top: 10px; padding-bottom: 10px; border-bottom: 2px #0F2232 solid; justify-content: space-between; align-items: center; display: inline-flex">
+      <div style="color: #A9A9A9; font-size: 24px; font-family: Montserrat; font-weight: 500; word-wrap: break-word; border: none; outline: none; width: 800px;">{{ data.survey.description }}</div>
     </div>
 
-    <template v-for="index in questions" :key="index">
-      <QuestionCompleting :index="index"/>
+    <template v-for="question in data.questions" :key="question.id">
+      <QuestionCompleting :question="question" />
     </template>
 
     <div class="publish">
