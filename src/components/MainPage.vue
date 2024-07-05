@@ -17,7 +17,7 @@ const handleLogin = async () => {
       password: password.value,
     });
     store.dispatch('updateToken', response.data.access_token);
-    router.push('/surveysAdmin');
+    // router.push('/surveysAdmin');
     console.log(store.getters.getToken);
   } catch (error) {
     // Обработка ошибки при выполнении запроса

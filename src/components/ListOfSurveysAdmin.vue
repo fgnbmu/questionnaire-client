@@ -96,6 +96,9 @@
                             <img style="cursor: pointer;" @click="router.push('/creating');" src="/src/assets/plus.svg">
                         </div>
                     </div>
+                    <div v-if="activeSurveys.length === 0" style="color: red; margin-top: 10px; font-size: 24px; font-family: Montserrat; font-weight: 600; width: 100%; text-align: start;">
+                        Нет опросов для прохождения/редактирования
+                    </div>
                     <div class="availableSurveysList">
                         <div v-for="item in activeSurveys" :key="item.id" class="surveyCard" style="position: relative;" @click="selectedSurveyCardId = item.id">
                             <div style="align-self: stretch; padding: 10px; justify-content: flex-start; align-items: center; gap: 50px; display: inline-flex">
@@ -118,6 +121,9 @@
                 <div style="width: 100%; height: 100%; padding-left: 40px; padding-right: 40px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 10px; display: inline-flex">
                     <div style="align-self: stretch; padding-top: 5px; padding-bottom: 5px; justify-content: flex-start; align-items: center; gap: 50px; display: inline-flex">
                         <div style="color: #0F2232; font-size: 27px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; width: 285px;">История</div>
+                    </div>
+                    <div v-if="expiredSurveys.length === 0" style="color: red; margin-top: 10px; font-size: 24px; font-family: Montserrat; font-weight: 600; width: 100%; text-align: start;">
+                        Нет просроченных опросов
                     </div>
                     <div class="availableSurveysList">
                         <div v-for="item in expiredSurveys" :key="item.id" class="surveyCard" style="position: relative;">

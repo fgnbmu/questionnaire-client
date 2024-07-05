@@ -3,10 +3,16 @@
     import QuestionCompleting from './QuestionCompleting.vue';
     import { useStore } from 'vuex';
     import axios from 'axios';
+    import { useRouter } from 'vue-router';
 
     const store = useStore();
+    const router = useRouter();
+
+    const surveyAlreadyCompleted = ref(false);
 
     const selectedSurveyId = store.state.selectedSurveyId; 
+
+    const isAdmin = ref("");
 
     interface SurveyData {
       survey: {
@@ -35,6 +41,7 @@
 
     onMounted(() => {
       console.log("Value from Vuex store:", store.state.selectedSurveyId);
+      getProfile();
       startSurvey(selectedSurveyId);
     }); 
 
@@ -52,6 +59,8 @@
         console.log(data.value);
     } catch (error) {
         console.error(error);
+        // console.log('Вы уже прошли этот опрос');
+        surveyAlreadyCompleted.value = true;
     }
     };
 
@@ -83,6 +92,21 @@
     //   }
     // };
 
+    const getProfile = async () => {
+      try {
+          const response = await axios.get(`${store.getters.getApiUrl}/auth/profile`, {
+              headers: {
+                  // 'Authorization': `Bearer ${token}`
+                  'Authorization': `Bearer ${store.getters.getToken}`
+              }
+          });
+          isAdmin.value = response.data.isAdmin;
+
+      } catch (error) {
+          console.error(error);
+      }
+    };
+
     const postAnswers = async () => {
     const answersData = {
         surveyId: answers.value.surveyId,
@@ -94,7 +118,7 @@
 
     try {
         const response = await axios.post(
-            `${store.getters.getApiUrl}/surveys/question`,
+            `${store.getters.getApiUrl}/surveys/${store.getters.getSelectedSurveyId}/answer`,
             answersData,
             {
                 headers: {
@@ -103,6 +127,12 @@
             }
         );
         console.log(response.data);
+        if (isAdmin.value) {
+        router.push('/surveysAdmin');
+        }
+        else {
+          router.push('/surveys');
+        }
     } catch (error) {
         console.error(error);
     }
@@ -114,6 +144,10 @@
 </script>
 
 <template>
+  <div v-if="surveyAlreadyCompleted" style="color: red; margin-top: 10px; font-size: 24px; font-family: Montserrat; font-weight: 600; width: 100%; text-align: center;">
+    Вы уже прошли этот опрос
+  </div>
+
   <div v-if="data" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; align-self: stretch; flex-direction: column; gap: 30px;">
     <div v-if="data" style="width: 924px; height: 100%; padding-top: 10px; padding-bottom: 10px; justify-content: space-between; align-items: center; display: inline-flex">
       <div style="color: #0F2232; font-size: 32px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">{{ data.survey.title }}</div>

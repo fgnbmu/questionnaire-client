@@ -98,7 +98,7 @@
           description: surveyDescription.value,
           startDate: store.getters.getStartDate,
           expirationDate: store.getters.getExpirationDate,
-          // userAccess: 1,
+          userAccess: [],
           facultyAccess: store.getters['getSelectedFaculties'],
           // createdAt: new Date().toISOString(),
           // updatedAt: new Date().toISOString()
