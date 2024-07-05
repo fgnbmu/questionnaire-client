@@ -8,6 +8,7 @@ interface State {
   startDate: string | null;
   expirationDate: string | null;
   status: string; // Добавляем переменную для хранения статуса опроса
+  selectedFaculties: number[];
 }
 
 const store = createStore<State>({
@@ -17,7 +18,8 @@ const store = createStore<State>({
     apiUrl: `http://${import.meta.env.VITE_API_HOST}:${import.meta.env.VITE_API_PORT}`,
     startDate: null, // Добавляем переменные для хранения даты начала и конца опроса
     expirationDate: null,  
-    status: 'не опубликован' // Добавляем значение по умолчанию для статуса опроса
+    status: 'не опубликован', // Добавляем значение по умолчанию для статуса опроса,
+    selectedFaculties: []
   },
   mutations: {
     updateSelectedSurveyId(state, newValue: number) {
@@ -34,6 +36,9 @@ const store = createStore<State>({
     },
     updateStatus(state, newStatus: string) {
       state.status = newStatus;
+    },
+    updateSelectedFaculties(state, faculties: number[]) {
+      state.selectedFaculties = faculties;
     }
   },
   actions: {
@@ -51,6 +56,9 @@ const store = createStore<State>({
     },
     updateStatus({ commit }, newStatus: string) {
       commit('updateStatus', newStatus);
+    },
+    updateSelectedFaculties({ commit }, faculties: number[]) {
+      commit('updateSelectedFaculties', faculties);
     }
   },
   getters: {
@@ -71,6 +79,9 @@ const store = createStore<State>({
     },
     getStatus: (state) => {
       return state.status;
+    },
+    getSelectedFaculties: (state) => {
+      return state.selectedFaculties;
     }
   },
   plugins: [createPersistedState()]

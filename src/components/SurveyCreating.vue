@@ -99,7 +99,7 @@
           startDate: store.getters.getStartDate,
           expirationDate: store.getters.getExpirationDate,
           // userAccess: 1,
-          // facultyAccess: 1,
+          facultyAccess: store.getters['getSelectedFaculties'],
           // createdAt: new Date().toISOString(),
           // updatedAt: new Date().toISOString()
         };

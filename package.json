@@ -20,6 +20,7 @@
     "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.6",
     "@vitejs/plugin-vue": "^5.0.4",
     "eslint-plugin-vue": "^9.26.0",
     "globals": "^15.6.0",

@@ -1,15 +1,18 @@
 <script setup lang="ts">
     import { ref } from 'vue';
+    // import { useStore } from 'vuex';
+
+    // const store = useStore();
 
     const props = defineProps({
         question: {
-            type: Object, // Assuming the question is an object
+            type: Object,
             required: true
         }
     });
 
-    const selectedOption = ref('Текст'); // Default selected option
-    console.log(selectedOption);
+    const textAnswer = ref('');
+
 </script>
 
 <template>
@@ -18,7 +21,7 @@
             <div style="color: black; font-size: 32px; font-family: Montserrat; font-weight: 600; white-space: pre-wrap; word-wrap: break-word; overflow-x: hidden; width: 100%; background: #E9ECEE; outline: none; border: none; ">{{ props.question.title }}</div>
         </div>
         <div class="text" v-if="props.question.questionType === 1">
-            <input type="text" placeholder="Введите ответ" style="width: 100%; border: none; outline: none; background: #E9ECEE; color: #A9A9A9; font-size: 22px; font-family: Montserrat; font-weight: 600; word-wrap: break-word;">
+            <input type="text" placeholder="Введите ответ" v-model="textAnswer" style="width: 100%; border: none; outline: none; background: #E9ECEE; color: #A9A9A9; font-size: 22px; font-family: Montserrat; font-weight: 600; word-wrap: break-word;">
         </div>
         <div class="file" v-if="props.question.questionType === 4">
             <img src="/src/assets/fileIcon.svg">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, onUpdated } from 'vue';
     import QuestionCompleting from './QuestionCompleting.vue';
     import { useStore } from 'vuex';
     import axios from 'axios';
@@ -28,6 +28,7 @@
           maxAnswerCount: number;
           attachedImages: string[];
       }>;
+
     }
 
     const data = ref<SurveyData | null>(null);
@@ -54,6 +55,62 @@
     }
     };
 
+    const answers = ref<{ surveyId: number; surveyTitle: string; expirationDate: string;  answers: { questionId: number; answer: string; }[] }>({
+      surveyId: 0, // Initialize surveyId to 0 or update when data is available
+      surveyTitle: '',
+      expirationDate: '',
+      answers: []
+    });
+
+
+    const updateAnswers = () => {
+      answers.value.surveyId = store.getters.getSelectedSurveyId;
+      answers.value.surveyTitle = data.value ? data.value.survey.title : '';
+      answers.value.expirationDate = data.value ? data.value.survey.expirationDate : '';
+      answers.value.answers = data.value ? data.value.questions.map(question => ({ questionId: question.id, answer: '' })) : [];
+    };
+
+    onUpdated(() => {
+      updateAnswers();
+      console.log(answers.value);
+    });
+
+    // Function to update the answer based on questionId
+    // const updateAnswer = (questionId: number, answer: string) => {
+    //   const foundAnswer = answers.value.answers.find(a => a.questionId === questionId);
+    //   if (foundAnswer) {
+    //     foundAnswer.answer = answer;
+    //   }
+    // };
+
+    const postAnswers = async () => {
+    const answersData = {
+        surveyId: answers.value.surveyId,
+        answers: answers.value.answers.map(answer => ({
+            questionId: answer.questionId,
+            answer: answer.answer
+        }))
+    };
+
+    try {
+        const response = await axios.post(
+            `${store.getters.getApiUrl}/surveys/question`,
+            answersData,
+            {
+                headers: {
+                    'Authorization': `Bearer ${store.getters.getToken}`
+                }
+            }
+        );
+        console.log(response.data);
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+// Logging the answers array for verification
+
+
 </script>
 
 <template>
@@ -72,7 +129,7 @@
 
     <div class="publish">
         <div style="width: 924px; height: 100%; flex-direction: column; justify-content: center; align-items: flex-end; display: inline-flex; padding-bottom: 10px;">
-            <div class="actionButton">
+            <div class="actionButton" @click="postAnswers()">
                 <div style="text-align: center; color: white; font-size: 24px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">Отправить</div>
             </div>
             <!-- При отправке опроса переход на страницу с выбором опроса и историей -->

@@ -2,7 +2,7 @@
     import Header from './HeaderSection.vue';
     import SurveyOptionsModal from './SurveyOptionsModal.vue';
 
-    import { onMounted, ref, onUnmounted } from 'vue';
+    import { onMounted, ref, onUnmounted, watchEffect } from 'vue';
     import { useRouter } from "vue-router";
     import axios from 'axios';
     import { useStore } from 'vuex';
@@ -10,7 +10,7 @@
     const store = useStore();
     const router = useRouter();
    
-    const data = ref<Array<{ id: number, title: string, description: string }>>([]);
+    const data = ref<Array<{ id: number, title: string, description: string, expirationDate: string, startDate: string }>>([]);
 
     const selectedSurveyCardId = ref<number | null>(null);
     const selectedOption = ref('');
@@ -23,7 +23,6 @@
             console.error('No survey card selected!');
         }
     };
-
 
     const getAllSurveys = async () => {
     try {
@@ -54,17 +53,35 @@
     onMounted(() => {
         getAllSurveys(); 
         document.addEventListener('click', handleClickOutside);
+
+        // console.log(expiredSurveys);
+        // console.log(activeSurveys);
     });
 
     const openSurvey = (surveyId: number) => {
         store.dispatch('updateSelectedSurveyId', surveyId); 
         if (selectedOption.value === 'Пройти опрос') {
             router.push('/completing');
+            console.log(store.getters.getToken);
         }
         else {
             router.push('/editing');
         }
     }
+
+    // const currentDate = new Date();
+
+    const expiredSurveys = ref<Array<{ id: number, title: string, description: string }>>([]);
+    const activeSurveys = ref<Array<{ id: number, title: string, description: string }>>([]);
+
+    watchEffect(() => {
+        const currentDate = new Date();
+        
+        expiredSurveys.value = data.value.filter(survey => new Date(survey.expirationDate) < currentDate || new Date(survey.startDate) > currentDate);
+        activeSurveys.value = data.value.filter(survey => new Date(survey.expirationDate) >= currentDate && new Date(survey.startDate) <= currentDate);
+    });
+
+
 </script>
 
 <template>
@@ -80,7 +97,7 @@
                         </div>
                     </div>
                     <div class="availableSurveysList">
-                        <div v-for="item in data" :key="item.id" class="surveyCard" style="position: relative;" @click="selectedSurveyCardId = item.id">
+                        <div v-for="item in activeSurveys" :key="item.id" class="surveyCard" style="position: relative;" @click="selectedSurveyCardId = item.id">
                             <div style="align-self: stretch; padding: 10px; justify-content: flex-start; align-items: center; gap: 50px; display: inline-flex">
                                 <div style="flex: 1 1 0; color: #0F2232; font-size: 24px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">{{ item.title }}</div>
                             </div>
@@ -97,18 +114,18 @@
                     </div>
                 </div>
             </div>
-            <div style="width: 844px; height: 100%; padding-left: 40px; padding-right: 40px; justify-content: space-between; align-items: flex-start; display: inline-flex">
+            <div class="availableSurveys">
                 <div style="width: 100%; height: 100%; padding-left: 40px; padding-right: 40px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 10px; display: inline-flex">
                     <div style="align-self: stretch; padding-top: 5px; padding-bottom: 5px; justify-content: flex-start; align-items: center; gap: 50px; display: inline-flex">
-                        <div style="color: #0F2232; font-size: 27px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">История</div>
+                        <div style="color: #0F2232; font-size: 27px; font-family: Montserrat; font-weight: 700; word-wrap: break-word; width: 285px;">История</div>
                     </div>
-                    <div style="align-self: stretch; padding-top: 10px; padding-bottom: 10px; justify-content: flex-start; align-items: flex-start; gap: 40px; display: inline-flex">
-                        <div style="width: 200px; height: 210px; padding-top: 10px; padding-bottom: 20px; padding-left: 10px; padding-right: 10px; background: #E9ECEE; border-radius: 15px; overflow: hidden; border: 2px #DDDDDD solid; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 20px; display: inline-flex">
+                    <div class="availableSurveysList">
+                        <div v-for="item in expiredSurveys" :key="item.id" class="surveyCard" style="position: relative;">
                             <div style="align-self: stretch; padding: 10px; justify-content: flex-start; align-items: center; gap: 50px; display: inline-flex">
-                                <div style="flex: 1 1 0; color: #0F2232; font-size: 24px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">Опрос 1</div>
+                                <div style="flex: 1 1 0; color: #0F2232; font-size: 24px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">{{ item.title }}</div>
                             </div>
                             <div style="align-self: stretch; flex: 1 1 0; padding-left: 10px; padding-right: 10px; flex-direction: column; justify-content: space-between; align-items: flex-start; display: flex">
-                                <div style="width: 187px; color: #B3B3B3; font-size: 15px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">Описание</div>
+                                <div style="width: 187px; color: #B3B3B3; font-size: 15px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">{{ item.description }}</div>
                                 <div style="display: flex; justify-content: flex-end; width: 100%;">
                                     <img src="/src/assets/arrowRight.svg">
                                 </div>

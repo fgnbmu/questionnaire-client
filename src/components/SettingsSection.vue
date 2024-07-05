@@ -103,7 +103,10 @@ const parseDateWithTime = (dateString: string): Date | null => {
     return isNaN(parsedDate.getTime()) ? null : parsedDate;
 }
 
-
+watch(selectedFaculties, (newSelectedFaculties) => {
+    const facultiesIds = newSelectedFaculties.map(faculty => faculty.id);
+    store.dispatch('updateSelectedFaculties', facultiesIds);
+});
 
 </script>
 
